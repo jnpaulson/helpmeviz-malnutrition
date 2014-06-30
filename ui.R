@@ -3,6 +3,10 @@ library(ggplot2)
 library(ggvis)
 
 load("data.rdata")
+regions_complete[regions_complete==2] = "Africa"
+regions_complete[regions_complete==142] = "Asia"
+regions_complete[regions_complete==150] = "Europe"
+regions_complete[regions_complete==19] = "South America"
 
 shinyUI(navbarPage("HelpMeViz",
   tabPanel("Scatter plot",sidebarLayout(sidebarPanel(
