@@ -1,6 +1,6 @@
-HelpMeViz Hackathon - Saturday, June 28, 2014
-
+HelpMeViz Hackathon - Women's Empowerment and Nutrition
 =============
+
 Overview
 --------
 
@@ -33,6 +33,11 @@ Data Sources
 
 The data used for this analysis comes from several sources and was compiled into a nice comprehensible format by [Keith Hughitt](https://github.com/khughitt/helpmeviz-womens-empowerment) in his Github repo related to the same challenge.
 
+
+Exploring the data
+----------------
+The visualization can be accessed [here](https://jpaulson.shinyapps.io/helpmeviz/).
+
 Running the visualization locally
 ----------------
 
@@ -45,6 +50,3 @@ library("shiny")
 runGitHub("helpmeviz-malnutrition", "nosson")
 ```
 
-Exploring the data
-----------------
-The visualization can be accessed [here](https://jpaulson.shinyapps.io/helpmeviz/).
