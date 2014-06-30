@@ -2,7 +2,7 @@ library(shiny)
 library(ggplot2)
 library(ggvis)
 
-load("~/Desktop/helpmeviz/data.rdata")
+load("data.rdata")
 
 shinyUI(navbarPage("HelpMeViz",
   tabPanel("Scatter plot",sidebarLayout(sidebarPanel(
