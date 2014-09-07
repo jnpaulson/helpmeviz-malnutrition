@@ -2,11 +2,11 @@ library(shiny)
 library(ggplot2)
 library(ggvis)
 
-load("data.rdata")
-regions_complete[regions_complete==2] = "Africa"
-regions_complete[regions_complete==142] = "Asia"
-regions_complete[regions_complete==150] = "Europe"
-regions_complete[regions_complete==19] = "South America"
+
+df_complete = read.csv("./Stunting_clean.csv")
+regions_complete = df_complete[,2]
+rownames(df_complete) = df_complete[,1]
+df_complete = df_complete[,-c(1:2)]
 
 shinyUI(navbarPage("HelpMeViz",
   tabPanel("Scatterplots",sidebarLayout(sidebarPanel(
