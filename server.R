@@ -15,26 +15,24 @@ all_values <- function(x) {
 shinyServer(function(input, output) {
 
   df <- reactive({
-    data.frame(x=df_complete[,input$xaxis],y=df_complete[,input$yaxis],
+    data.frame(x=df_complete[,input$xaxis],y=df_complete[,"mean_stunting"],
       country=rownames(df_complete))
-    })
-  size <- reactive({
-    df_complete[,input$choice]
     })
 
   base <- df %>% ggvis(x=~x,y=~y) %>%
-  layer_points(size:=size,fill.update= ~factor(regions_complete)) %>% 
+  layer_points(fill.update= ~factor(regions_complete)) %>% 
   layer_smooths(
-    span = input_slider(0.2, 1, value = 1, step = 0.05, label = "span")
+    span = 1
     ) %>% 
-  layer_text(text.hover:=~country,text.update:=~country)
+  layer_text(text.hover:=~country,text.update:=~country) %>%
+  add_axis("y", title = "Average stunting")
 
   base %>% add_tooltip(all_values,"hover") %>%
   bind_shiny("ggvis", "ggvis_ui")
 
-  box <- reactive(
-    as.numeric(df_complete[,input$boxplot])
-    )
+  # box <- reactive(
+  #   as.numeric(df_complete[,input$boxplot])
+  #   )
   # yaxis <- reactive(
   #   as.numeric(df_complete[,input$yaxis])
   #   )
@@ -42,9 +40,16 @@ shinyServer(function(input, output) {
   #   # scaleFunction(as.numeric(df_complete[,input$size]))
   #   )
   
-output$boxp<-renderPlot({
+# output$boxp<-renderPlot({
   # qplot(x=xaxis(),y=yaxis(),size=size(),xlab=input$xaxis,ylab=input$yaxis) + scale_size_continuous() + geom_smooth()
-  boxplot(box()~factor(regions_complete))
+  # boxplot(box()~factor(regions_complete))
+  # })
+
+output$text<-renderText({
+  "Data aggregated from the World Bank Development Indicators from 1990-2013. 
+  Github repo for data aggregation located here:
+  Github repo for the shiny visualization located here:
+  "
   })
 
  })
