@@ -2,34 +2,31 @@ library(shiny)
 library(ggplot2)
 library(ggvis)
 
-
-df_complete = read.csv("./Stunting_clean.csv")
-regions_complete = df_complete[,2]
-rownames(df_complete) = df_complete[,1]
-df_complete = df_complete[,-c(1:2)]
-
-shinyUI(fluidPage(
-  titlePanel("HelpMeViz"),
-  
-  sidebarLayout(position="right",sidebarPanel(
-    selectInput("xaxis","x-axis:",colnames(df_complete)[c(1,17,15,20,8,11)],colnames(df_complete)[1]),
-    uiOutput("ggvis_ui")
-  ),
-  
-  mainPanel(
-    ggvisOutput("ggvis"),
-    br(),
-    textOutput('text')
-  ))
-  # ,
-  # tabPanel("Boxplots",sidebarLayout(sidebarPanel(
-  #   selectInput("boxplot","Choice:",colnames(df_complete),colnames(df_complete)[1])
-  #   ),
-  #   mainPanel(
-  #     plotOutput('boxp'),
-  #   )
-  #   )
-  # )
-))
+xaxisChoices= c("Gender Inequality Index Score","Maternal Mortality Ratio","Male-Female Secondary School Enrollment Ratio",
+  "Female Secondary School Completion Rate","Percent of Girls Married before Age 18","Under 5 Mortality Rate",
+  "Female Labor Force Participation","Labor force participation rate for ages 15-24, female (%) (modeled ILO estimate)","Labor force, female (% of total labor force)",
+  "Account at a formal financial institution, female (% age 15+)","Female legislators, senior officials and managers (% of total)")
 
 
+shinyUI(
+  fluidPage(  
+    titlePanel(
+      tags$div(class="header", checked=NA,
+      tags$a(href="http://www.bread.org/","Bread for the World"),
+      tags$small(tags$p("Interactive explorer of stunting and women's empowerment")))
+      ),
+    sidebarLayout(position="right",
+      sidebarPanel(
+        # checkboxInput("regionGroup","Group by region.",value=FALSE),
+        checkboxInput("countryText","Include country text.",value=FALSE),
+        selectInput("xaxis","x-axis:",xaxisChoices,xaxisChoices[1]),
+        uiOutput("ggvis_ui")
+      ),
+      mainPanel(
+        ggvisOutput("ggvis"),
+        br(),
+        uiOutput('text')
+      )
+    )
+  )
+)

@@ -3,9 +3,16 @@ library(ggplot2)
 library(ggvis)
 
 df_complete = read.csv("./Stunting_clean.csv")
-regions_complete = df_complete[,2]
+Region = factor(df_complete[,2])
+names(Region) = df_complete[,1]
 rownames(df_complete) = df_complete[,1]
 df_complete = df_complete[,-c(1:2)]
+df_complete = df_complete[,(c(1,2,17,15,20,8,11,22:25,26))]
+colnames(df_complete)[1:11] = c("Gender Inequality Index Score","Maternal Mortality Ratio","Male-Female Secondary School Enrollment Ratio",
+  "Female Secondary School Completion Rate","Percent of Girls Married before Age 18","Under 5 Mortality Rate",
+  "Female Labor Force Participation","Labor force participation rate for ages 15-24, female (%) (modeled ILO estimate)","Labor force, female (% of total labor force)",
+  "Account at a formal financial institution, female (% age 15+)","Female legislators, senior officials and managers (% of total)")
+df_complete = cbind(df_complete,Region)
 
 all_values <- function(x) {
  if(is.null(x)) return(NULL)
@@ -15,41 +22,36 @@ all_values <- function(x) {
 shinyServer(function(input, output) {
 
   df <- reactive({
-    data.frame(x=df_complete[,input$xaxis],y=df_complete[,"mean_stunting"],
-      country=rownames(df_complete))
+    dataframe = data.frame(x=df_complete[,input$xaxis],y=df_complete[,"mean_stunting"],
+      country=rownames(df_complete),Regions=df_complete[,"Region"])
+    dataframe = na.omit(dataframe)
+    dataframe
     })
 
-  base <- df %>% ggvis(x=~x,y=~y) %>%
-  layer_points(fill.update= ~factor(regions_complete)) %>% 
-  layer_smooths(
-    span = 1
-    ) %>% 
-  layer_text(text.hover:=~country,text.update:=~country) %>%
-  add_axis("y", title = "Average stunting")
+  reactive({
+   base <- df() %>% ggvis(x=~x,y=~y) %>%
+    layer_points(size=100,fill.update=~Regions) %>% 
+    layer_smooths(span = 1) %>% 
+    add_tooltip(all_values,"hover") %>%
+    add_axis("y", title = "Average stunting") %>% scale_numeric("y", domain = c(0, 55), nice = FALSE, clamp = TRUE)
 
-  base %>% add_tooltip(all_values,"hover") %>%
-  bind_shiny("ggvis", "ggvis_ui")
+    maxx = max(df()$x,na.rm=TRUE)
+    if(input$countryText==TRUE){
+      base %>% layer_text(text.hover:=~country,text.update:=~country) %>% 
+      scale_numeric("x", domain = c(0, maxx), nice = FALSE, clamp = TRUE) %>% 
+      add_axis("x",title=input$xaxis) 
+    } else {
+      base %>% scale_numeric("x", domain = c(0, maxx), nice = FALSE, clamp = TRUE) %>% 
+      add_axis("x",title=input$xaxis)
+    }
+    }) %>% bind_shiny("ggvis", "ggvis_ui")
 
-  # box <- reactive(
-  #   as.numeric(df_complete[,input$boxplot])
-  #   )
-  # yaxis <- reactive(
-  #   as.numeric(df_complete[,input$yaxis])
-  #   )
-  # size <- reactive(
-  #   # scaleFunction(as.numeric(df_complete[,input$size]))
-  #   )
-  
-# output$boxp<-renderPlot({
-  # qplot(x=xaxis(),y=yaxis(),size=size(),xlab=input$xaxis,ylab=input$yaxis) + scale_size_continuous() + geom_smooth()
-  # boxplot(box()~factor(regions_complete))
-  # })
 
 output$text<-renderText({
-  "Data aggregated from the World Bank Development Indicators from 1990-2013. 
-  Github repo for data aggregation located here:
-  Github repo for the shiny visualization located here:
-  "
+  HTML("Data aggregated from the World Bank Development Indicators from 1990-2013.<p>
+  Github repository for data aggregation and sources <a href='http://goo.gl/ncwq0d'>available here</a> and
+  for interactive visualization <a href='http://goo.gl/LZ1cTi'>available here</a>."
+  )
   })
 
  })
