@@ -24,26 +24,32 @@ shinyServer(function(input, output) {
   df <- reactive({
     dataframe = data.frame(x=df_complete[,input$xaxis],y=df_complete[,"mean_stunting"],
       country=rownames(df_complete),Regions=df_complete[,"Region"])
+    if(input$regionGroup!="All"){
+      dataframe = dataframe[dataframe$Regions==input$regionGroup,]
+    }
     dataframe = na.omit(dataframe)
     dataframe
     })
 
   reactive({
-   base <- df() %>% ggvis(x=~x,y=~y) %>%
-    layer_points(size=100,fill.update=~Regions) %>% 
-    layer_smooths(span = 1) %>% 
-    add_tooltip(all_values,"hover") %>%
-    add_axis("y", title = "Average stunting") %>% scale_numeric("y", domain = c(0, 55), nice = FALSE, clamp = TRUE)
-
     maxx = max(df()$x,na.rm=TRUE)
-    if(input$countryText==TRUE){
-      base %>% layer_text(text.hover:=~country,text.update:=~country) %>% 
-      scale_numeric("x", domain = c(0, maxx), nice = FALSE, clamp = TRUE) %>% 
+    maxy = max(df()$y,na.rm=TRUE)
+
+    base <- df() %>% ggvis(x=~x,y=~y) %>%
+      layer_points(size=100,fill.update=~Regions) %>% 
+      add_tooltip(all_values,"hover") %>%
+      add_axis("y", title = "Average stunting") %>% 
+      scale_numeric("y", domain = c(0, maxy), nice = FALSE, clamp = TRUE) %>%
+      # scale_numeric("x", domain = c(0, maxx), nice = FALSE, clamp = TRUE) %>% 
       add_axis("x",title=input$xaxis) 
-    } else {
-      base %>% scale_numeric("x", domain = c(0, maxx), nice = FALSE, clamp = TRUE) %>% 
-      add_axis("x",title=input$xaxis)
+
+    if(input$countryText==TRUE){
+      base <- base %>% layer_text(text.hover:=~country,text.update:=~country)
     }
+    if(input$layerSmooth==TRUE){
+      base <- base %>% layer_smooths(span = 1)
+    }
+    base
     }) %>% bind_shiny("ggvis", "ggvis_ui")
 
 
