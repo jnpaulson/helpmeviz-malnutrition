@@ -9,12 +9,14 @@ xaxisChoices=c("Gender Inequality Index Score","Maternal Mortality Ratio","Male-
 regions = c("All","Asia","Europe","Africa","Americas")
 
 shinyUI(
-  fluidPage(  
+  fluidPage(
+    tags$head(includeScript("google-analytics.js")),
     titlePanel(
       tags$div(class="header", checked=NA,
-      tags$a(href="http://www.bread.org/","Bread for the World"),
-      tags$small(tags$p("Interactive explorer of stunting and women's empowerment")))
-      ),
+        a(href="http://www.bread.org/","Bread for the World"),
+        tags$small(p("Interactive explorer of stunting and women's empowerment"))
+      )
+    ),
     sidebarLayout(position="right",
       sidebarPanel(
         checkboxInput("countryText","Country text",value=FALSE),
@@ -31,4 +33,3 @@ shinyUI(
     )
   )
 )
-
