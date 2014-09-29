@@ -36,7 +36,7 @@ The data used for this analysis comes from several sources and was compiled into
 
 Exploring the data
 ----------------
-The visualization can be accessed [here](https://jpaulson.shinyapps.io/helpmeviz/).
+The visualization can be accessed [here](https://jpaulson.shinyapps.io/helpmeviz-malnutrition/).
 
 Running the visualization locally
 ----------------
