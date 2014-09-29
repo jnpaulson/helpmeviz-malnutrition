@@ -8,9 +8,21 @@ xaxisChoices=c("Gender Inequality Index Score","Maternal Mortality Ratio","Male-
   "Account at a formal financial institution, female (% age 15+)","Female legislators, senior officials and managers (% of total)")
 regions = c("All","Asia","Europe","Africa","Americas")
 
+googleAnalytics <- function(account="UA-55278636-1"){
+  HTML(paste("<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', '",account,"', 'umd.edu');
+  ga('send', 'pageview');
+
+</script>", sep=""))
+}
+
 shinyUI(
   fluidPage(
-    tags$head(includeScript("google-analytics.js")),
     titlePanel(
       tags$div(class="header", checked=NA,
         a(href="http://www.bread.org/","Bread for the World"),
@@ -26,6 +38,7 @@ shinyUI(
         uiOutput("ggvis_ui")
       ),
       mainPanel(
+        googleAnalytics(),
         ggvisOutput("ggvis"),
         br(),
         uiOutput('text')
