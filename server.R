@@ -7,11 +7,11 @@ Region = factor(df_complete[,2])
 names(Region) = df_complete[,1]
 rownames(df_complete) = df_complete[,1]
 df_complete = df_complete[,-c(1:2)]
-df_complete = df_complete[,(c(1,2,17,15,20,8,11,22:25,26))]
-colnames(df_complete)[1:11] = c("Gender Inequality Index Score","Maternal Mortality Ratio","Male-Female Secondary School Enrollment Ratio",
-  "Female Secondary School Completion Rate","Percent of Girls Married before Age 18","Under 5 Mortality Rate",
-  "Female Labor Force Participation","Labor force participation rate for ages 15-24, female (%) (modeled ILO estimate)","Labor force, female (% of total labor force)",
-  "Account at a formal financial institution, female (% age 15+)","Female legislators, senior officials and managers (% of total)")
+# df_complete2 = df_complete[,(c(1,2,17,15,20,8,11,22:25,26))]
+# colnames(df_complete)[1:11] = c("Gender Inequality Index Score","Maternal Mortality Ratio","Male-Female Secondary School Enrollment Ratio",
+  # "Female Secondary School Completion Rate","Percent of Girls Married before Age 18","Under 5 Mortality Rate",
+  # "Female Labor Force Participation","Labor force participation rate for ages 15-24, female (%) (modeled ILO estimate)","Labor force, female (% of total labor force)",
+  # "Account at a formal financial institution, female (% age 15+)","Female legislators, senior officials and managers (% of total)")
 df_complete = cbind(df_complete,Region)
 
 all_values <- function(x) {
