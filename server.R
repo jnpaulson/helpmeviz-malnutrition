@@ -72,13 +72,11 @@ shinyServer(function(input, output) {
       add_tooltip(all_values,"hover") %>%
       add_axis("y", title = "Percent of Children Under Age 5 who are Stunted") %>% 
       scale_numeric("y", domain = c(0, maxy), nice = FALSE, clamp = TRUE) %>%
+      layer_smooths(span=1) %>%
       add_axis("x",title=input$xaxis) 
 
     if(input$countryText==TRUE){
       base <- base %>% layer_text(text.hover:=~country,text.update:=~country)
-    }
-    if(input$layerSmooth==TRUE){
-      base <- base %>% layer_smooths(span = 1)
     }
     base
     }) %>% bind_shiny("ggvis", "ggvis_ui")
@@ -87,8 +85,8 @@ shinyServer(function(input, output) {
 output$text<-renderText({
   HTML("Data aggregated from the World Bank Development Indicators from 1990-2013.<p>
   Github repository for data aggregation and sources <a href='http://goo.gl/ncwq0d'>available here</a> and
-  for interactive visualization <a href='http://goo.gl/LZ1cTi'>available here</a>."
-  )
+  for interactive visualization <a href='http://goo.gl/LZ1cTi'>available here</a>.
+  <p> Visualization by <a href='http://www.cbcb.umd.edu/~jpaulson/'>Joseph N. Paulson</a> and <a href='https://github.com/khughitt'>Keith Hughitt</a>")
   })
 
  })

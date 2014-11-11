@@ -28,7 +28,7 @@ googleAnalytics <- function(account="UA-55278636-1"){
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', '",account,"', 'umd.edu');
+  ga('create', '",account,"', 'shinyapps.io');
   ga('send', 'pageview');
 
 </script>", sep=""))
@@ -45,9 +45,8 @@ shinyUI(
     sidebarLayout(position="right",
       sidebarPanel(
         checkboxInput("countryText","Display Country Labels",value=FALSE),
-        checkboxInput("layerSmooth","Display a fittted smooth model",value=FALSE),
         selectInput("regionGroup","Visualize region",regions,regions[1]),
-        selectInput("xaxis","Select Women's Empowerment Indicators",xaxisNamesUI,xaxisNamesUI[1]),
+        selectInput("xaxis","Select a Women's Empowerment Indicator",xaxisNamesUI,xaxisNamesUI[1]),
         uiOutput("ggvis_ui")
       ),
       mainPanel(
