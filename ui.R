@@ -2,46 +2,23 @@ library(shiny)
 library(ggplot2)
 library(ggvis)
 
-# xaxisChoices=c("Gender Inequality Index Score","Maternal Mortality Ratio","Male-Female Secondary School Enrollment Ratio",
-  # "Female Secondary School Completion Rate","Percent of Girls Married before Age 18","Under 5 Mortality Rate",
-  # "Female Labor Force Participation","Labor force participation rate for ages 15-24, female (%) (modeled ILO estimate)","Labor force, female (% of total labor force)",
-  # "Account at a formal financial institution, female (% age 15+)","Female legislators, senior officials and managers (% of total)")
-xaxisChoices=c(
-"GII_2012",                        
-"maternal_mortality_ratio",        
-"adolescent_fertility_rate_gii",   
-"seats_parlim_female_gii",         
-"labor_participation_female_gii",  
-"labor_participation_male_gii",    
-"ifpri_hunger_index",              
-"ifpri_under5_mortality",          
-"ifpri_undernourishment",          
-"ifpri_under5_underweight",        
-"labor_participation_female",      
-"labor_participation_total_ilo",   
-"labor_participation_total_nat",   
-"labor_participation_ratio_ilo",   
-"secondary_school_female",         
-"secondary_school_male",           
-"secondary_school_female_ratio",   
-"contraceptive_prevalence",        
-"hiv_rate_female",                 
-"married_by_18_rate",              
-"adolescent_fertility_rate",       
-"labor_participation_female_ilo",  
-"labor_force_female_percent",      
-"account_at_financial_inst_female",
-"female_legislators_officials_mgrs",
-"mortality_under5_female",         
-"contrib_family_workers_female",   
-"credit_card_female",              
-"educational_attainment_femae",    
-"mortality_rate_female_child",     
-"belief_beating_justified",        
-"mean_stunting",                   
-"mean_malnutrition",               
-"secondary_education"           
-)
+xaxisNamesUI = c(
+"Gender Inequality Index Score (0-1, 1 is Extreme Inequality)",
+"Maternal Mortality Ratio (per 100,000 live births)",
+"Female Under 5 Mortality Rate",
+"Female Secondary School Completion Rate",
+"Ratio of Female to Male Secondary School Enrollment",
+"Percent of Girls Married Before Age 18",
+"Adolescent Fertility Rate (number of births per 1,000 girls age 15-19)",
+"Female Labor Force Participation Rate (percent of females age 15-64)",
+"Percent of Females with an Account at a Formal Financial Institution (age 15+)",
+"Percent of Legislators, Senior Officials, and Managers that are Female",
+"Number of Females Who Die Before Age 5 (per 1,000)",
+"Percent of Females with a Credit Card (age 15+)",
+"Percent of Women Who have Completed Lower-Secondary School (age 25+)",
+"Number of Female Infants Who Die before Age 1 (per 1,000)",
+"Percent of Women who Believe a Husband is Justified in Beating his Wife When she Argues with him")
+
 regions = c("All","Asia","Europe","Africa","Americas")
 
 googleAnalytics <- function(account="UA-55278636-1"){
@@ -61,16 +38,16 @@ shinyUI(
   fluidPage(
     titlePanel(
       tags$div(class="header", checked=NA,
-        a(href="http://www.bread.org/","Bread for the World"),
-        tags$small(p("Interactive explorer of stunting and women's empowerment"))
+        a(href="http://www.bread.org/","As Women Rise, Malnutrition Falls"),
+        tags$small(p("Use this interactive tool to compare country data on women's empowerment and stunting."))
       )
     ),
     sidebarLayout(position="right",
       sidebarPanel(
-        checkboxInput("countryText","Country text",value=FALSE),
+        checkboxInput("countryText","Display Country Labels",value=FALSE),
         checkboxInput("layerSmooth","Display a fittted smooth model",value=FALSE),
         selectInput("regionGroup","Visualize region",regions,regions[1]),
-        selectInput("xaxis","x-axis:",xaxisChoices,xaxisChoices[1]),
+        selectInput("xaxis","Select Women's Empowerment Indicators",xaxisNamesUI,xaxisNamesUI[1]),
         uiOutput("ggvis_ui")
       ),
       mainPanel(
